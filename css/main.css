@@ -1,0 +1,22 @@
+body {
+  display: flex;
+  flex-direction: row;
+}
+
+.cats-list {
+  width: 20%;
+}
+
+.cats-display {
+  width: 80%;
+  position: relative;
+}
+
+.cats-display__item {
+  visibility: hidden;
+  position: absolute;
+}
+
+.cats-display__item.visible {
+  visibility: visible;
+}
