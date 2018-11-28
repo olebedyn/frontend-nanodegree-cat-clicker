@@ -9,6 +9,21 @@
 <body>
   <ul id="cats-list" class="cats-list"></ul>
   <div id="cats-display" class="cats-display"></div>
+  <div id="admin" class="admin">
+    <button id="admin-btn" class="admin-btn">Admin</button>
+    <div id="admin-form" class="admin-form">
+      <form id="cat-edit-form" class="cat-edit-form" action="">
+        <input type="text" name="cat-clicks-num" value="" class="form-input">
+        <span class="form-label">Click</span>
+        <input type="text" name="cat-name" value="" class="form-input">
+        <span class="form-label">Name</span>
+        <input type="text" name="cat-image-url" value="" class="form-input">
+        <span class="form-label">Image url</span>
+        <input type="submit" id="cancel-btn" name="cancel" value="Cancel">
+        <input type="submit" id="save-btn" name="save" value="Save">
+      </form>
+    </div>
+  </div>
   <script src="js/main.js" charset="utf-8"></script>
 </body>
 </html>

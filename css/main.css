@@ -1,14 +1,25 @@
 body {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+  margin: 0;
 }
 
 .cats-list {
-  width: 20%;
+  width: 18%;
+  position: relative;
+  margin: 0;
+  padding: 5px;
 }
 
 .cats-display {
   width: 80%;
+  position: relative;
+  margin: 0;
+}
+
+.admin {
+  width: 30%;
   position: relative;
 }
 
@@ -17,6 +28,24 @@ body {
   position: absolute;
 }
 
-.cats-display__item.visible {
-  visibility: visible;
+.visible {
+  visibility: visible !important;
+}
+
+.admin-form {
+  visibility: hidden;
+}
+
+.cat-edit-form {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.form-input {
+  width: 30%;
+}
+
+.form-label {
+  margin-left: 5px;
+  width: 65%;
 }
