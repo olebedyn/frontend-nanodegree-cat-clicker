@@ -8,19 +8,23 @@
 </head>
 <body>
   <ul id="cats-list" class="cats-list"></ul>
-  <div id="cats-display" class="cats-display"></div>
+  <div id="cats-display" class="cats-display">
+    <div id="cat-clicks"></div>
+    <div id="cat-name"></div>
+    <img id="cat-image" src="" alt="">
+  </div>
   <div id="admin" class="admin">
     <button id="admin-btn" class="admin-btn">Admin</button>
     <div id="admin-form" class="admin-form">
       <form id="cat-edit-form" class="cat-edit-form" action="">
-        <input type="text" name="cat-clicks-num" value="" class="form-input">
+        <input type="text" name="cat-clicks-num" id="cat-clicks-edit" value="" class="form-input">
         <span class="form-label">Click</span>
-        <input type="text" name="cat-name" value="" class="form-input">
+        <input type="text" name="cat-name" id="cat-name-edit" value="" class="form-input">
         <span class="form-label">Name</span>
-        <input type="text" name="cat-image-url" value="" class="form-input">
+        <input type="text" name="cat-image-url" id="cat-url-edit" value="" class="form-input">
         <span class="form-label">Image url</span>
-        <input type="submit" id="cancel-btn" name="cancel" value="Cancel">
-        <input type="submit" id="save-btn" name="save" value="Save">
+        <input type="button" id="cancel-btn" name="cancel" value="Cancel">
+        <input type="button" id="save-btn" name="save" value="Save">
       </form>
     </div>
   </div>

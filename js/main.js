@@ -18,6 +18,7 @@ class CatModel {
       this.cats[i] = new Cat(`cat${i + 1}`, `img/cat${i + 1}.jpg`, i + 1);
     }
     this.adminVisible = false;
+    this.currentCat = this.cats[0];
   }
 }
 
@@ -26,36 +27,33 @@ class CatModel {
  */
 
 class CatView {
-  constructor() {}
+  constructor() {
+    this.catImage = document.getElementById("cat-image");
+    this.catClicksText = document.getElementById("cat-clicks");
+    this.catNameText = document.getElementById("cat-name");
+    this.render = this.render.bind(this);
+  }
 
   /**
-   * Adds a cat container with number of clicks, cat name and image. Invisible by default.
+   * Adds a cat container with number of clicks, cat name and image.
    */
   init() {
-    const cats = catApp.getCats();
-    for (let cat of cats) {
-      let catContainer = document.createElement("div");
-      catContainer.id = cat.num;
-      catContainer.classList.add("cats-display__item");
-      let catClicks = document.createElement("p");
-      catClicks.textContent = `Clicks: ${cat.clicks}`;
-      catClicks.id = `cat${cat.num}-clicks`;
-      let catName = document.createElement("p");
-      catName.textContent = `Name: ${cat.name}`;
-      let catImage = document.createElement("img");
-      catImage.src = cat.image;
-      catContainer.appendChild(catClicks);
-      catContainer.appendChild(catName);
-      catContainer.appendChild(catImage);
-      document.getElementById("cats-display").appendChild(catContainer);
-      catImage.addEventListener("click", () => {
-        // TODO: Refactor this not to modify model directly
-        cat.clicks++;
-        document.getElementById(
-          `cat${cat.num}-clicks`
-        ).textContent = `Clicks: ${cat.clicks}`;
-      });
-    }
+    this.render();
+
+    this.catImage.addEventListener("click", () => {
+      catApp.addClicks();
+    });
+  }
+
+  render() {
+    const cat = catApp.getCurrentCat();
+    this.catClicksText.textContent = `Clicks: ${cat.clicks}`;
+    this.catNameText.textContent = `Name: ${cat.name}`;
+    this.catImage.src = cat.image;
+  }
+
+  renderClicks(clicks) {
+    this.catClicksText.textContent = `Clicks: ${clicks}`;
   }
 }
 
@@ -74,42 +72,53 @@ class CatListView {
    */
   createCatListItem(cat) {
     let catListItem = document.createElement("li");
+
     catListItem.textContent = cat.name;
     document.getElementById("cats-list").appendChild(catListItem);
     catListItem.addEventListener("click", () => {
-      for (let el of document.getElementsByClassName("visible")) {
-        el.classList.remove("visible");
-      }
-      document.getElementById(cat.num).classList.add("visible");
+      catApp.setCurrentCat(cat);
+      catApp.setAdminSettings(false);
     });
   }
 }
 
 class AdminView {
   constructor() {
-    this.clickHandler = this.clickHandler.bind(this);
-    this.saveHandler = this.saveHandler.bind(this);
-  }
-
-  clickHandler(setting) {
-    catApp.setAdminSettings(setting);
-    this.render();
-  }
-
-  saveHandler() {
-    catApp.setAdminSettings(false);
-    this.render();
+    this.nameEdit = document.getElementById("cat-name-edit");
+    this.imageEdit = document.getElementById("cat-url-edit");
+    this.clicksEdit = document.getElementById("cat-clicks-edit");
+    this.adminForm = document.getElementById("admin-form");
+    this.adminBtn = document.getElementById("admin-btn");
+    this.cancelBtn = document.getElementById("cancel-btn");
+    this.saveBtn = document.getElementById("save-btn");
   }
 
   init() {
-    document.getElementById("admin-btn").onclick = this.clickHandler(true);
-    document.getElementById("cancel-btn").onclick = this.clickHandler(false);
-    document.getElementById("save-btn").onclick = this.saveHandler(false);
+    this.adminBtn.onclick = () => {
+      catApp.setAdminSettings(true);
+    };
+    this.cancelBtn.onclick = () => {
+      catApp.setAdminSettings(false);
+    };
+    this.saveBtn.onclick = () => {
+      catApp.setAdminSettings(false);
+      catApp.setNewCat(
+        this.nameEdit.value,
+        this.clicksEdit.value,
+        this.imageEdit.value
+      );
+    };
   }
 
   render() {
     if (catApp.getAdminSettings()) {
-      document.getElementById("admin-form").classList.add("visible");
+      const cat = catApp.getCurrentCat();
+      this.nameEdit.value = cat.name;
+      this.imageEdit.value = cat.image;
+      this.clicksEdit.value = cat.clicks;
+      this.adminForm.classList.add("visible");
+    } else {
+      this.adminForm.classList.remove("visible");
     }
   }
 }
@@ -136,10 +145,33 @@ class CatController {
 
   setAdminSettings(setting) {
     this.catModel.adminVisible = setting;
+    this.adminView.render();
   }
 
   getAdminSettings() {
     return this.catModel.adminVisible;
+  }
+
+  getCurrentCat() {
+    return this.catModel.currentCat;
+  }
+
+  setCurrentCat(cat) {
+    this.catModel.currentCat = cat;
+    this.catView.render();
+  }
+
+  addClicks() {
+    this.catModel.currentCat.clicks++;
+    this.catView.renderClicks(this.catModel.currentCat.clicks);
+  }
+
+  setNewCat(name, clicks, src) {
+    console.log(name);
+    this.catModel.currentCat.name = name;
+    this.catModel.currentCat.clicks = clicks;
+    this.catModel.currentCat.image = src;
+    this.catView.render();
   }
 }
 
